@@ -1,16 +1,35 @@
-all: BSDE
+	CXX	= g++
+	RM	= rm -f
+	CSRC	= io_png.c
+	CXXSRC	= libdenoising.cpp lib.cpp BSDE.cpp
+	COBJ	= $(CSRC:.c=.o)
+	CXXOBJ	= $(CXXSRC:.cpp=.o)
+	OBJ     = $(COBJ) $(CXXOBJ)
+	CXXOPT  = -O3 
+	LDLIBS = -lpng
+	CXXFLAGS= -std=c++0x -fopenmp -Wall
+	BIN	= BSDE
 
-BSDE: BSDE.o io_png.o lib.o 
-	g++ -std=c++0x BSDE.o lib.o io_png.o -o BSDE  -fopenmp -lpng -Wall -O3
+delault: $(BIN)
 
-BSDE.o: BSDE.cpp
-	g++ -std=c++0x -c BSDE.cpp -fopenmp -Wall -O3
+$(BIN): $(OBJ)
+	$(CXX) $(OBJ) -o $@ $(CXXFLAGS) $(LDLIBS) $(CXXOPT)
 
-lib.o: lib.cpp
-	g++ -std=c++0x -c lib.cpp -Wall -O3 
+%.o: %.cpp
+	$(CXX) -c -o $@ $< $(CXXFLAGS) $(CXXOPT)
 
-io_png.o: io_png.c
-	g++ -std=c++0x -c io_png.c -Wall -O3
-
+%.o: %.c
+	$(CXX) -c -o $@ $< $(CXXFLAGS) $(CXXOPT)
 clean:
-	rm -rf *o BSDE
+	$(RM) $(OBJ)
+
+distclean: clean
+	$(RM) $(BIN) ex*.png
+
+tests:
+	@echo Example 1.
+	./$(BIN) lena.png 20 ex1_in.png ex1_out.png 1 0.0
+	@echo Example 2.
+	./$(BIN) lena.png 10 ex2_in.png ex2_out.png 0 0.4
+	@echo \n
+
