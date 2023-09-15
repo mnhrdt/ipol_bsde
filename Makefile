@@ -26,7 +26,7 @@ clean:
 distclean: clean
 	$(RM) $(BIN) ex*.png
 
-tests:
+tests: $(BIN)
 	@echo Example 1.
 	./$(BIN) lena.png 20 ex1_in.png ex1_out.png 1 0.0
 	@echo Example 2.
