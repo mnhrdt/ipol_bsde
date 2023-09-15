@@ -1,16 +1,16 @@
 /*
-Copyright (c) 2023 Dariusz Borkowski 
+Copyright (c) 2023 Dariusz Borkowski
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free Software Foundation,
 either version 3 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with this program.
-If not, see <http://www.gnu.org/licenses/>. 
+If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "libdenoising.h"
@@ -23,25 +23,25 @@ void printProgress (double percentage){
     fflush (stdout);
 }
 
-/*---Definition of the function c(t) for greyscale and RGB images-----------*/ 
+/*---Definition of the function c(t) for greyscale and RGB images-----------*/
 
 float function_c(float t,float c){
 	return c;
 }
 
-/*---Definition of the function b(t) for greyscale and RGB images-----------*/ 
+/*---Definition of the function b(t) for greyscale and RGB images-----------*/
 
 float function_b(float t){
 	return 0.05f;
 }
 
-/*---Definition of the function g() for greyscale images--------------------*/ 
+/*---Definition of the function g() for greyscale images--------------------*/
 /*-g() is a measure of neighborhood similarity at points (X1,X2) (x1,x2)-*/
 
 float function_g(int X_1,int X_2,dbImage& Noisy,int x_1,int x_2,float radius,float h,float Sigma){
 	float dist=0.0;
 	float dif;
-    	for (int xx=-radius; xx<= radius; xx++) 
+    	for (int xx=-radius; xx<= radius; xx++)
         	for (int yy=-radius; yy<=radius; yy++) {
 	    		dif=Noisy(X_1+xx,X_2+yy)-Noisy(x_1+xx,x_2+yy);
             		dist += dif*dif;
@@ -51,13 +51,13 @@ float function_g(int X_1,int X_2,dbImage& Noisy,int x_1,int x_2,float radius,flo
 	return 1.0f-fdif*0.01f;
 }
 
-/*---Definition of the function g() for RGB images-------------------------*/ 
+/*---Definition of the function g() for RGB images-------------------------*/
 /*-g() is a measure of neighborhood similarity at points (X1,X2) (x1,x2)---*/
 
 float function_g(int X_1,int X_2,dbImageRGB& Noisy,int x_1,int x_2,float radius,float h,float Sigma){
 	float dist=0.0;
 	dbRGB dif;
-    	for (int xx=-radius; xx<= radius; xx++) 
+    	for (int xx=-radius; xx<= radius; xx++)
         	for (int yy=-radius; yy<=radius; yy++) {
 	    		dif=Noisy(X_1+xx,X_2+yy)-Noisy(x_1+xx,x_2+yy);
             		dist += dif.R*dif.R;
@@ -69,7 +69,7 @@ float function_g(int X_1,int X_2,dbImageRGB& Noisy,int x_1,int x_2,float radius,
 	return 1.0f-fdif*0.01f;
 }
 
-/*--- Implementation for RGB images-----------------------------------------*/ 
+/*--- Implementation for RGB images-----------------------------------------*/
 
 double BSDEdenoisingRGB(dbImageRGB& Original,float Sigma,dbImageRGB& Input,dbImageRGB& totalOutput,int addNoise,float c){
 
@@ -124,7 +124,7 @@ double BSDEdenoisingRGB(dbImageRGB& Original,float Sigma,dbImageRGB& Input,dbIma
 		for(int y=0;y<(int)ny;y++){
 			if(addNoise){
 				vector.R=gen.Next();
-				vector.G=gen.Next();	
+				vector.G=gen.Next();
 				vector.B=gen.Next();
 				Input(x,y)=Original(x,y)+Sigma*vector;
 			}
@@ -141,7 +141,7 @@ double BSDEdenoisingRGB(dbImageRGB& Original,float Sigma,dbImageRGB& Input,dbIma
                         ConvInput(x,y) = (4 * Input(x, y) + 2 * Input(x + 1, y) + 2 * Input(x - 1, y) +
                         2 * Input(x, y + 1) + 2 * Input(x, y - 1) + Input(x + 1, y + 1) + Input(x - 1, y - 1) +
                         Input(x + 1, y - 1) + Input(x - 1, y + 1)) / float(16.0f);
-	for(int x=0;x<(int)nx;x++) 
+	for(int x=0;x<(int)nx;x++)
 		for(int y=0;y<(int)ny;y++){
             		dbGrad grad=ConvInput.grad(x,y,0.4);
             		DX(x,y)=grad.dx;
@@ -174,7 +174,7 @@ double BSDEdenoisingRGB(dbImageRGB& Original,float Sigma,dbImageRGB& Input,dbIma
 #ifdef _OPENMP
 #pragma omp for schedule(dynamic)
 #endif
-	for(int x=0;x<(int)nx;x++){ 
+	for(int x=0;x<(int)nx;x++){
 		printProgress(((double)x+1.0)/int(nx));
 		float rand;
 		for(int y=0;y<(int)ny;y++){
@@ -202,7 +202,7 @@ if(c>0 && Norm(x,y)>Sigma){
 					}
 				}
 				for(int k=j+1;k<m;k++){
-					rand=dt*gen.Next();	
+					rand=dt*gen.Next();
 					X[k]=std::fmax(0.0f,std::fmin(float(nx),X[k-1]+rand*DX(X[k-1],Y[k-1])));
                             		Y[k]=std::fmax(0.0f,std::fmin(float(ny),Y[k-1]+rand*DY(X[k-1],Y[k-1])));
 					weight=a[k];
@@ -239,7 +239,7 @@ else{
 						}
 						else{
 						weight=a[k]*function_g(int(round(X[k])),int(round(Y[k])),Input,x,y,radius,h,Sigma);
-    						for (int xx=-radius; xx<= radius; xx++) 
+    						for (int xx=-radius; xx<= radius; xx++)
         						for (int yy=-radius; yy<=radius; yy++) {
 								Weights(x+xx,y+yy)+=weight;
 								Output(x+xx,y+yy)=Output(x+xx,y+yy)+weight*Input(X[k]+xx,Y[k]+yy);
@@ -247,12 +247,12 @@ else{
 						}
 					}
 				}
-				
+
 			}
 
 }
 		}
-	
+
 	}
 	delete[] X;
 	delete[] Y;
@@ -353,7 +353,7 @@ double BSDEdenoising(dbImage& Original,float Sigma,dbImage& Input,dbImage& total
                         ConvInput(x,y) = (4 * Input(x, y) + 2 * Input(x + 1, y) + 2 * Input(x - 1, y) +
                         2 * Input(x, y + 1) + 2 * Input(x, y - 1) + Input(x + 1, y + 1) + Input(x - 1, y - 1) +
                         Input(x + 1, y - 1) + Input(x - 1, y + 1)) / float(16.0f);
-	for(int x=0;x<(int)nx;x++) 
+	for(int x=0;x<(int)nx;x++)
 		for(int y=0;y<(int)ny;y++){
             		dbGrad grad=ConvInput.grad(x,y,0.4);
             		DX(x,y)=grad.dx;
@@ -363,7 +363,7 @@ double BSDEdenoising(dbImage& Original,float Sigma,dbImage& Input,dbImage& total
 #ifdef _OPENMP
 #pragma omp parallel
 #endif
-{ 
+{
 
 /*---Each thread creates private images and variables------------------------------*/
 
@@ -384,7 +384,7 @@ double BSDEdenoising(dbImage& Original,float Sigma,dbImage& Input,dbImage& total
 #ifdef _OPENMP
 #pragma omp for  schedule(dynamic)
 #endif
-	for(int x=0;x<(int)nx;x++){ 
+	for(int x=0;x<(int)nx;x++){
 		printProgress(((double)x+1.0)/int(nx));
 		float rand;
 		for(int y=0;y<(int)ny;y++){
@@ -412,7 +412,7 @@ if(c>0 && Norm(x,y)>Sigma){
 					}
 				}
 				for(int k=j+1;k<m;k++){
-					rand=dt*gen.Next();	
+					rand=dt*gen.Next();
 					X[k]=std::fmax(0.0f,std::fmin(float(nx),X[k-1]+rand*DX(X[k-1],Y[k-1])));
                             		Y[k]=std::fmax(0.0f,std::fmin(float(ny),Y[k-1]+rand*DY(X[k-1],Y[k-1])));
 					weight=a[k];
@@ -448,7 +448,7 @@ else{
 						}
 						else{
 						weight=a[k]*function_g(int(round(X[k])),int(round(Y[k])),Input,x,y,radius,h,Sigma);
-    						for (int xx=-radius; xx<= radius; xx++) 
+    						for (int xx=-radius; xx<= radius; xx++)
         						for (int yy=-radius; yy<=radius; yy++) {
 								Weights(x+xx,y+yy)+=weight;
 								Output(x+xx,y+yy)=Output(x+xx,y+yy)+weight*Input(X[k]+xx,Y[k]+yy);
@@ -459,7 +459,7 @@ else{
 			}
 }
 		}
-	
+
 	}
 	delete[] X;
 	delete[] Y;

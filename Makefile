@@ -1,14 +1,14 @@
-	CXX	= g++
-	RM	= rm -f
-	CSRC	= io_png.c
-	CXXSRC	= libdenoising.cpp lib.cpp BSDE.cpp
-	COBJ	= $(CSRC:.c=.o)
-	CXXOBJ	= $(CXXSRC:.cpp=.o)
-	OBJ     = $(COBJ) $(CXXOBJ)
-	CXXOPT  = -O3 
-	LDLIBS = -lpng
-	CXXFLAGS= -std=c++0x -fopenmp -Wall
-	BIN	= BSDE
+CXX	= g++
+RM	= rm -f
+CSRC	= io_png.c
+CXXSRC	= libdenoising.cpp lib.cpp BSDE.cpp
+COBJ	= $(CSRC:.c=.o)
+CXXOBJ	= $(CXXSRC:.cpp=.o)
+OBJ     = $(COBJ) $(CXXOBJ)
+CXXOPT  = -O3
+LDLIBS  = -lpng
+CXXFLAGS= -std=c++0x -fopenmp -Wall
+BIN	= BSDE
 
 delault: $(BIN)
 

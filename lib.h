@@ -20,11 +20,11 @@ class dbRGB{
 		float B;
 		dbRGB(float,float,float);
 		dbRGB(float);
-		dbRGB();		
+		dbRGB();
 		friend dbRGB operator+(const dbRGB &, const dbRGB &);
 		friend dbRGB operator-(const dbRGB &, const dbRGB &);
 		friend dbRGB operator*(const dbRGB &, const dbRGB &);
-		friend dbRGB operator/(const dbRGB &, const dbRGB &);	
+		friend dbRGB operator/(const dbRGB &, const dbRGB &);
 		static float abs(dbRGB);
 		static dbRGB round(dbRGB);
 		static dbRGB max(float,dbRGB);
@@ -72,7 +72,7 @@ class dbImageRGB
 			dbRGB& operator()(int,int);
 			dbRGB operator()(float,float);
 			~dbImageRGB();
-			dbGrad grad(float,float,float);		
+			dbGrad grad(float,float,float);
 };
 double PSNR(dbImageRGB&, dbImageRGB&);
 double PSNR(dbImage&, dbImage&);

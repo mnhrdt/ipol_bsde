@@ -6,7 +6,7 @@ Differential Equations
 
 #VERSION
 
-2.0 
+2.0
 
 
 #AUTHOR
@@ -18,7 +18,7 @@ Dariusz Borkowski <dbor@mat.umk.pl>
 
 ./BSDE.cpp - This program reads PNG images, runs BSDE
 	 method and writes PNG images. Only 8bit (grayscale
-	 and RGB) PNG images are handled. 
+	 and RGB) PNG images are handled.
 
 ./libdenoising.cpp, ./libdenoising.h - Implementation of BSDE
 	method: Algorithm 1, Algorithm 2, Algorithm 3.
@@ -41,10 +41,10 @@ The code is written in C/C++ and should compile on any system
 with an g++ compiler.
 
 The libpng header and libraries are required on the system for
-compilation and execution. 
+compilation and execution.
 
 The implementation uses OPENMP which not supported by old
-versions of g++. 
+versions of g++.
 
 
 Ubuntu 22.04 LTS installation:
@@ -61,9 +61,9 @@ Simply use the provided makefile, with the command `make`.
 
 # USAGE
 
-usage: ./BSDE original.png sigma noisy.png denoised.png add_noise c 
+usage: ./BSDE original.png sigma noisy.png denoised.png add_noise c
 
-BSDE takes 6 parameter: 
+BSDE takes 6 parameter:
 * original.png 		: initial noise free image (PNG image)
 * sigma     		: the noise standard deviation
 				(non negative real number)
@@ -71,7 +71,7 @@ BSDE takes 6 parameter:
 				algorithm (PNG image)
 * denoised.png	 	: denoised image (PNG image)
 * add_noise     	: the add noise option (integer number
-				from the set {0,1}) 
+				from the set {0,1})
 * c			: the enhancing parameter c (non-negative
 				real number from the range [0, 1])
 
@@ -112,6 +112,6 @@ This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
 License for more details.
- 
+
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.

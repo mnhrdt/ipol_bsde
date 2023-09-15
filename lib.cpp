@@ -1,16 +1,16 @@
 /*
-Copyright (c) 2023 Dariusz Borkowski 
+Copyright (c) 2023 Dariusz Borkowski
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free Software Foundation,
 either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with this program.
-If not, see <http://www.gnu.org/licenses/>. 
+If not, see <http://www.gnu.org/licenses/>.
 */
 #include "lib.h"
 
@@ -62,7 +62,7 @@ float& dbImage::operator()(int i,int j){
 				if (i >= (int)Width) i = Width - 1;
 				if (j >= (int)Height) j = Height - 1;
 				return A[i+j*Width];
-			}				
+			}
 float dbImage::operator()(float r,float s){
 				float a, b, c, d, deltax, deltay, v;
 				int i, j, k, l;
@@ -84,8 +84,8 @@ float dbImage::operator()(float r,float s){
 				d = A[k+l*Width];
 				v = (a * (1 - deltax) + b * deltax) * (1 - deltay) + (c * (1 - deltax) + d * deltax) * deltay;
 				return v;
-			}			
-			
+			}
+
 dbImage::~dbImage(){
 				delete[] A;
 			}
@@ -112,7 +112,7 @@ dbRGB& dbImageRGB::operator()(int i,int j){
 				if (i >= (int)Width) i = Width - 1;
 				if (j >= (int)Height) j = Height - 1;
 				return A[i+j*Width];
-			}				
+			}
 dbRGB dbImageRGB::operator()(float r,float s){
 				dbRGB a, b, c, d, deltax, deltay, v;
 				int i, j, k, l;
@@ -138,7 +138,7 @@ dbRGB dbImageRGB::operator()(float r,float s){
 dbImageRGB::~dbImageRGB(){
 			delete[] A;
 			}
-dbGrad dbImageRGB::grad(float r, float s, float h){		
+dbGrad dbImageRGB::grad(float r, float s, float h){
 			float dx,dy,Rx,Ry,Gx,Gy,Bx,By,g11,g12,g22,delta,lambda1,norma;
 			dbGrad w;
 			Rx = ((*this)(r + h, s).R - (*this)(r - h, s).R) / (2.0 * h);
@@ -169,8 +169,8 @@ double PSNR(dbImageRGB& o, dbImageRGB& r){
 	int m=o.getWidth(),n=o.getHeight();
 	double mse=0,div=(m*n*3.0);
 	for(int i=0;i<m;i++)for(int j=0;j<n;j++){
-			mse+=(o(i,j).R-r(i,j).R)*(o(i,j).R-r(i,j).R); 
-			mse+=(o(i,j).G-r(i,j).G)*(o(i,j).G-r(i,j).G); 
+			mse+=(o(i,j).R-r(i,j).R)*(o(i,j).R-r(i,j).R);
+			mse+=(o(i,j).G-r(i,j).G)*(o(i,j).G-r(i,j).G);
 			mse+=(o(i,j).B-r(i,j).B)*(o(i,j).B-r(i,j).B);
 	}
 	mse/=div;
@@ -180,7 +180,7 @@ double PSNR(dbImage& o, dbImage& r){
 	int m=o.getWidth(),n=o.getHeight();
 	double mse=0,div=(m*n*1.0);
 	for(int i=0;i<m;i++)for(int j=0;j<n;j++){
-			mse+=(o(i,j)-r(i,j))*(o(i,j)-r(i,j)); 
+			mse+=(o(i,j)-r(i,j))*(o(i,j)-r(i,j));
 	}
 	mse/=div;
 	return 20*log10(255)-10*log10(mse);
