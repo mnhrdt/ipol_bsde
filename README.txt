@@ -91,10 +91,10 @@ image.
 
 
 Example 2.
-We reconstruct lena.png noisy image with a sigma=10 and the enhancing
-effect c=0.4. We save the noisy and reconstructed image as in.png and
-out.png, respectively. In this case, we omit the display of the PSNR
-value.
+We reconstruct the already noisy image lena.png using sigma=10 and enhancing
+effect c=0.4.  The input image is copied unchanged to file in.png, and the
+reconstructed image is saved to file out.png.  Since there is no ground truth
+to compare against, the PSNR value is not computed.
 
 ./BSDE lena.png 10 in.png out.png 0 0.4
 
